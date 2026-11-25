@@ -114,60 +114,7 @@ PostgreSQL 스트리밍 복제로 스탠바이 서버에 데이터를 유지하�
 
 **4-1. 앱과 웹은 Cloudflare를 거쳐 운영 서버의 Spring Boot API에 연결되고, 운영 서버 장애 시 스탠바이 서버가 API를 인계합니다.**
 
-```mermaid
-flowchart LR
-  users(["넉터 앱(iOS, Android), 웹, 파트너 앱·웹"])
-
-  subgraph cf["Cloudflare"]
-    pages["Pages: 서비스 소개, 웹 앱, 파트너 웹"]
-    worker["Worker: API 라우팅, 장애 전환"]
-  end
-
-  subgraph main["운영 서버(Docker)"]
-    nginx["nginx: TLS, blue/green 전환"]
-    api["Spring Boot API(blue, green)"]
-    pg[("PostgreSQL 17")]
-    redis[("Redis 7.4")]
-    obs["Prometheus, Grafana"]
-  end
-
-  subgraph standby["스탠바이 서버"]
-    sapi["API 대기"]
-    spg[("PostgreSQL 복제본")]
-    posthog["PostHog 분석"]
-  end
-
-  subgraph ext["외부 서비스"]
-    login["카카오, 구글, 애플 로그인"]
-    fcm["Firebase FCM 푸시"]
-    s3["AWS S3 이미지"]
-    gemini["Gemini 대관현황표 인식"]
-    sentry["Sentry 오류 추적"]
-  end
-
-  subgraph deploy["빌드와 배포"]
-    gha["GitHub Actions"] --> ghcr["GHCR 이미지"]
-    eas["EAS Build, Expo Updates"]
-  end
-
-  users --> pages
-  users --> worker
-  worker --> nginx
-  worker -.->|장애 시| sapi
-  nginx --> api
-  api --> pg
-  api --> redis
-  pg -.->|스트리밍 복제| spg
-  api --> login
-  api --> fcm
-  api --> s3
-  api --> gemini
-  api --> sentry
-  obs --> api
-  ghcr --> api
-  ghcr --> sapi
-  eas --> users
-```
+- 보안상 제외함.
 
 | 구성 | 역할 |
 |---|---|
