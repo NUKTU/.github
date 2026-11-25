@@ -116,15 +116,6 @@ PostgreSQL 스트리밍 복제로 스탠바이 서버에 데이터를 유지하�
 
 - 보안상 제외함.
 
-| 구성 | 역할 |
-|---|---|
-| Cloudflare Pages | 서비스 소개, 웹 앱, 파트너 웹 정적 배포 |
-| Cloudflare Worker | API 요청 라우팅, 운영 서버 장애 시 스탠바이 전환, 웹의 같은 도메인 `/api` 경로 |
-| 운영 서버 | nginx, API blue/green 2개 슬롯, PostgreSQL, Redis, 지표 수집 |
-| 스탠바이 서버 | API 대기, PostgreSQL 비동기 복제본, PostHog 분석 |
-| GitHub Actions, GHCR | 백엔드 이미지 빌드, main 기준 자동 배포 |
-| EAS | iOS, Android 빌드와 스토어 제출, OTA 업데이트 |
-
 ## 5. 사용 기술
 
 | 영역 | 기술 |
